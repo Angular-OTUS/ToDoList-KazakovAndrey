@@ -1,5 +1,4 @@
 import { Component } from "@angular/core";
-import { TodoInput } from "src/app/components/todo-input/todo-input";
 import { TodoList } from "src/app/components/todo-list/todo-list";
 
 @Component({
@@ -7,10 +6,8 @@ import { TodoList } from "src/app/components/todo-list/todo-list";
     templateUrl: "./app.html",
     imports: [
         TodoList,
-        TodoInput,
     ],
 })
 export class App {
 
-    protected readonly title = "Todo List";
 }
