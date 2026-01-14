@@ -7,7 +7,7 @@ import { Component } from "@angular/core";
 export class TodoItem {
     protected readonly text: string = "todo item";
 
-    protected onDelete(event: MouseEvent) {
+    protected onDelete() {
         console.log("Delete item");
     };
 }

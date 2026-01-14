@@ -6,7 +6,7 @@ import { Component } from "@angular/core";
 })
 export class TodoInput {
 
-    protected onAdd(event: Event): void {
+    protected onAdd(): void {
         console.log("Add item");
     }
 }
