@@ -2,11 +2,12 @@
     <h1 class="text-center text-xl font-medium">{{ title }}</h1>
 
     <ul class="mt-4 first:mt-0">
-        <li><app-todo-item/></li>
-        <li><app-todo-item/></li>
-        <li><app-todo-item/></li>
-        <li><app-todo-item/></li>
+        @for (todo of todoList(); track todo.id) {
+            <li>
+                <app-todo-item [todo]="todo" (todoDeleted)="onTodoDeleted(todo)"/>
+            </li>
+        }
     </ul>
 
-    <app-todo-input/>
+    <app-todo-input (todoAdded)="onTodoAdded($event)"/>
 </section>

@@ -1,13 +1,17 @@
-import { Component } from "@angular/core";
+import { ChangeDetectionStrategy, output, input, Component } from "@angular/core";
+import { Todo } from "src/app/models/Todo";
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.OnPush,
     selector: "app-todo-item",
     templateUrl: "./todo-item.html",
 })
 export class TodoItem {
-    protected readonly text: string = "todo item";
+
+    readonly todo = input.required<Todo>();
+    readonly todoDeleted = output<void>();
 
     protected onDelete() {
-        console.log("Delete item");
-    };
+        this.todoDeleted.emit();
+    }
 }
