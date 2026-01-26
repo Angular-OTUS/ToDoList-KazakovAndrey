@@ -1,12 +1,33 @@
-import { Component } from "@angular/core";
+import { output, computed, signal, Component, ChangeDetectionStrategy } from "@angular/core";
+import { FormsModule } from "@angular/forms";
+import { MatInput, MatFormField } from "@angular/material/input";
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.OnPush,
     selector: "app-todo-input",
     templateUrl: "./todo-input.html",
+    imports: [
+        FormsModule,
+        MatFormField,
+        MatInput,
+    ],
 })
 export class TodoInput {
 
+    protected readonly todoInput = signal<string | null>(null);
+
+    protected readonly isAddButtonDisabled = computed<boolean>(() => {
+        const input = this.todoInput();
+        return !input;
+    });
+
+    protected readonly todoAdded = output<string>();
+
     protected onAdd(): void {
-        console.log("Add item");
+        const input = this.todoInput();
+        if (input) {
+            this.todoAdded.emit(input);
+            this.todoInput.set(null);
+        }
     }
 }
