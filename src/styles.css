@@ -1,1 +1,16 @@
 @import "tailwindcss";
+@import '@angular/material/prebuilt-themes/deeppurple-amber.css';
+
+.mat-mdc-form-field {
+    .mdc-text-field--filled:not(.mdc-text-field--disabled) {
+        background-color: #fff;
+    }
+
+    .mdc-text-field--focused:not(.mdc-text-field--disabled) {
+        background-color: #fff;
+    }
+
+    .mat-mdc-form-field-focus-overlay {
+        background-color: transparent;
+    }
+}

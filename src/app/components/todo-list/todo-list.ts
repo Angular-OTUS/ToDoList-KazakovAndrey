@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, signal, Component, OnInit } from "@angular/core";
+import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import { TodoInput } from "src/app/components/todo-input/todo-input";
 import { TodoItem } from "src/app/components/todo-item/todo-item";
 import { Todo } from "src/app/models/Todo";
@@ -10,15 +11,19 @@ import { Todo } from "src/app/models/Todo";
     imports: [
         TodoItem,
         TodoInput,
+        MatProgressSpinner,
     ],
 })
 export class TodoList implements OnInit {
 
+    protected readonly isLoading = signal<boolean>(true);
     protected readonly title = "Todo List";
     protected readonly todoList = signal<Todo[]>([]);
 
     ngOnInit() {
         this.initTodoList();
+
+        setTimeout(() => this.isLoading.set(false), 500);
     }
 
     protected onTodoDeleted(todo: Todo) {

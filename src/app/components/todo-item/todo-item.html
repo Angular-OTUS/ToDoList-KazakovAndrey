@@ -1,9 +1,9 @@
 <div class="bg-gray-200 rounded-md p-1 mt-2 flex justify-between items-center w-144">
     <span>{{ todo().text }}</span>
-    <button
-        class="rounded-lg p-1 ml-4 w-16 border-none bg-red-400 text-white cursor-pointer"
-        (click)="onDelete()"
-    >
-        Delete
-    </button>
+
+    <app-button
+        color="red"
+        title="Delete"
+        (clicked)="onDelete()"
+    />
 </div>
