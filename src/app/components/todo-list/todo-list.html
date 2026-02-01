@@ -1,13 +1,17 @@
 <section>
     <h1 class="text-center text-xl font-medium">{{ title }}</h1>
 
-    <ul class="mt-4 first:mt-0">
-        @for (todo of todoList(); track todo.id) {
-            <li>
-                <app-todo-item [todo]="todo" (todoDeleted)="onTodoDeleted(todo)"/>
-            </li>
-        }
-    </ul>
-
-    <app-todo-input (todoAdded)="onTodoAdded($event)"/>
+    @if (isLoading()) {
+        <mat-spinner class="mt-12 mb-12"></mat-spinner>
+    }
+    @else {
+        <ul class="mt-4 first:mt-0">
+            @for (todo of todoList(); track todo.id) {
+                <li>
+                    <app-todo-item [todo]="todo" (todoDeleted)="onTodoDeleted(todo)"/>
+                </li>
+            }
+        </ul>
+        <app-todo-input (todoAdded)="onTodoAdded($event)"/>
+    }
 </section>

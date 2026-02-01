@@ -5,14 +5,11 @@
             [(ngModel)]="todoInput"
         >
     </mat-form-field>
-    <button
-        class="rounded-lg p-1 w-16 border-none bg-green-500 text-white"
-        [class.opacity-50]="isAddButtonDisabled()"
-        [class.cursor-not-allowed]="isAddButtonDisabled()"
-        [class.cursor-pointer]="!isAddButtonDisabled()"
+
+    <app-button
+        title="Add"
+        color="green"
         [disabled]="isAddButtonDisabled()"
-        (click)="onAdd()"
-    >
-        Add
-    </button>
+        (clicked)="onAdd()"
+    />
 </div>
