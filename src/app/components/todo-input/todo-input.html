@@ -2,14 +2,26 @@
     <mat-form-field class="w-127">
         <input
             matInput
-            [(ngModel)]="todoInput"
+            placeholder="Add todo text"
+            [(ngModel)]="textInput"
         >
     </mat-form-field>
 
     <app-button
         title="Add"
         color="green"
+        appHint="Click to add"
         [disabled]="isAddButtonDisabled()"
         (clicked)="onAdd()"
     />
+
+    <mat-form-field class="w-127">
+        <textarea
+            matInput
+            maxlength="256"
+            placeholder="Add todo description"
+            [rows]="1"
+            [(ngModel)]="descriptionInput"
+        ></textarea>
+    </mat-form-field>
 </div>
