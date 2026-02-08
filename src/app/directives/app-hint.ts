@@ -1,11 +1,10 @@
-import { Directive, input, Renderer2, Inject, OnDestroy, DOCUMENT } from '@angular/core';
+import { Directive, input, Renderer2, Inject, OnDestroy, DOCUMENT, ElementRef } from '@angular/core';
 
 @Directive({
   selector: '[appHint]',
   host: {
-    '(mouseenter)': 'onMouseEnter($event)',
-    '(mousemove)': 'onMouseMove($event)',
-    '(mouseleave)': 'onMouseLeave()',
+    '(mouseover)': 'onMouseOver($event)',
+    '(mouseout)': 'onMouseOut()',
   }
 })
 export class AppHint implements OnDestroy {
@@ -16,23 +15,22 @@ export class AppHint implements OnDestroy {
 
     constructor(
         private readonly renderer: Renderer2,
-        @Inject(DOCUMENT) private readonly doc: Document
+        @Inject(DOCUMENT) private readonly doc: Document,
+        private readonly el: ElementRef<HTMLElement>,
     ) { }
 
     ngOnDestroy() {
         this.destroyTooltip();
     }
 
-    onMouseEnter(event: MouseEvent) {
+    onMouseOver(event: MouseEvent) {
+        event.stopPropagation();
+
         this.createTooltip();
-        this.moveTooltip(event);
+        this.positionTooltip();
     }
 
-    onMouseMove(event: MouseEvent) {
-        this.moveTooltip(event);
-    }
-
-    onMouseLeave() {
+    onMouseOut() {
         this.destroyTooltip();
     }
 
@@ -58,12 +56,18 @@ export class AppHint implements OnDestroy {
         this.tooltip = div;
     }
 
-    private moveTooltip(event: MouseEvent) {
-        if (this.tooltip) {
-            const offset = 12;
-            this.renderer.setStyle(this.tooltip, 'left', `${event.clientX + offset}px`);
-            this.renderer.setStyle(this.tooltip, 'top', `${event.clientY + offset}px`);
-        }
+    private positionTooltip() {
+        if (!this.tooltip) return;
+
+        const rect = this.el.nativeElement.getBoundingClientRect();
+        const gap = 6;
+        const tooltipRect = this.tooltip.getBoundingClientRect();
+
+        const left = rect.left + rect.width / 2 - tooltipRect.width / 2;
+        const top = rect.top - tooltipRect.height - gap;
+
+        this.renderer.setStyle(this.tooltip, 'left', `${left}px`);
+        this.renderer.setStyle(this.tooltip, 'top', `${top}px`);
     }
 
     private destroyTooltip() {
