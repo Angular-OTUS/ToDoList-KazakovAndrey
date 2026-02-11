@@ -1,4 +1,4 @@
-import { Directive, input, Renderer2, Inject, OnDestroy, DOCUMENT, ElementRef } from '@angular/core';
+import { Directive, input, Renderer2, inject, OnDestroy, DOCUMENT, ElementRef } from '@angular/core';
 
 @Directive({
   selector: '[appHint]',
@@ -13,11 +13,9 @@ export class AppHint implements OnDestroy {
 
     private tooltip: HTMLElement | null = null;
 
-    constructor(
-        private readonly renderer: Renderer2,
-        @Inject(DOCUMENT) private readonly doc: Document,
-        private readonly el: ElementRef<HTMLElement>,
-    ) { }
+    private readonly renderer = inject(Renderer2);
+    private readonly el = inject(ElementRef);
+    private readonly doc = inject(DOCUMENT);
 
     ngOnDestroy() {
         this.destroyTooltip();

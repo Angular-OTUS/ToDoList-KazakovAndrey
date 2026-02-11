@@ -12,6 +12,7 @@ export class AppButton {
     readonly color = input.required<AppButtonColor>();
     readonly title = input.required<string>();
     readonly disabled = input<boolean>(false);
+
     readonly clicked = output<void>();
 
     protected onClick(event: Event): void {

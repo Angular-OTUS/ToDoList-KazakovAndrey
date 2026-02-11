@@ -3,11 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { MatInput, MatFormField } from '@angular/material/input';
 import { AppButton } from 'src/app/components/app-button/app-button';
 import { AppHint } from 'src/app/directives/app-hint';
-
-export type TodoInputData = {
-    text: string;
-    description: string | null;
-}
+import { TodoInputData } from "src/app/models/TodoInputData";
 
 @Component({
     changeDetection: ChangeDetectionStrategy.OnPush,

@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, signal, Component, OnInit, computed } from '@angular/core';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { TodoDesc } from 'src/app/components/todo-desc/todo-desc';
-import { TodoInput, TodoInputData } from 'src/app/components/todo-input/todo-input';
+import { TodoInput } from "src/app/components/todo-input/todo-input";
 import { TodoItem } from 'src/app/components/todo-item/todo-item';
 import { AppHint } from 'src/app/directives/app-hint';
 import { Todo } from 'src/app/models/Todo';
+import { TodoInputData } from "src/app/models/TodoInputData";
 
 @Component({
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -27,16 +28,18 @@ export class TodoList implements OnInit {
     protected readonly selectedItemId = signal<number| null>(null);
     protected readonly description = computed<string | null>(() => {
         const itemId = this.selectedItemId();
-        const selectedTodo = this.todoList().find(item => item.id == itemId);
+        const selectedTodo = this.todoList().find(item => item.id === itemId);
         return selectedTodo?.description ?? null;
     });
 
     ngOnInit() {
-        this.initTodoList();
 
         setTimeout(() => this.isLoading.set(false), 500);
 
-        const firstTodo = this.todoList().at(0);
+        const todoList = this.getTodoList();
+        this.todoList.set(todoList)
+
+        const firstTodo = todoList.at(0);
         this.selectedItemId.set(firstTodo?.id ?? null);
     }
 
@@ -62,13 +65,13 @@ export class TodoList implements OnInit {
         this.selectedItemId.set(todo.id);
     }
 
-    private initTodoList() {
+    private getTodoList() {
         const todos = [];
         for (let i = 0; i < 5; i++) {
             const id = i + 1;
             todos.push({id, text: `todo #${id}`, description: `description #${id}`});
         }
 
-        this.todoList.set(todos);
+        return todos;
     }
 }
