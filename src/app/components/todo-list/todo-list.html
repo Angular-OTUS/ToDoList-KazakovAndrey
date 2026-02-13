@@ -13,7 +13,7 @@
                             <app-todo-item
                                 appHint="Click to select"
                                 [todo]="todo"
-                                [selected]="selectedItemId() == todo.id"
+                                [selected]="selectedItemId() === todo.id"
                                 (todoDeleted)="onTodoDeleted(todo)"
                                 (todoClicked)="onTodoClicked(todo)"
                             />

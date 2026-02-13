@@ -11,11 +11,11 @@ export class AppHint implements OnDestroy {
 
     readonly text = input.required<string>({ alias: 'appHint' });
 
-    private tooltip: HTMLElement | null = null;
-
     private readonly renderer = inject(Renderer2);
     private readonly el = inject(ElementRef);
     private readonly doc = inject(DOCUMENT);
+
+    private tooltip: HTMLElement | null = null;
 
     ngOnDestroy() {
         this.destroyTooltip();

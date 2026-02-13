@@ -29,6 +29,7 @@ export class TodoList implements OnInit {
     protected readonly description = computed<string | null>(() => {
         const itemId = this.selectedItemId();
         const selectedTodo = this.todoList().find(item => item.id === itemId);
+
         return selectedTodo?.description ?? null;
     });
 
@@ -45,6 +46,10 @@ export class TodoList implements OnInit {
 
     protected onTodoDeleted(todo: Todo) {
         this.todoList.update(todos => todos.filter(t => t.id !== todo.id));
+
+        if (this.selectedItemId() === todo.id) {
+            this.selectedItemId.set(null);
+        }
     }
 
     protected onTodoAdded(data: TodoInputData) {

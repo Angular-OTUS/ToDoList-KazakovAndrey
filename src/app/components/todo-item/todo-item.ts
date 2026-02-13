@@ -16,6 +16,7 @@ export class TodoItem {
 
     readonly todo = input.required<Todo>();
     readonly selected = input.required<boolean>();
+
     readonly todoDeleted = output<void>();
     readonly todoClicked = output<void>();
 
