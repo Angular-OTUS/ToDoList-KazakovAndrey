@@ -12,6 +12,7 @@ export class AppButton {
     readonly color = input.required<AppButtonColor>();
     readonly title = input.required<string>();
     readonly disabled = input<boolean>(false);
+    readonly type = input<'reset' | 'submit' | 'button'>('button');
 
     readonly clicked = output<void>();
 
