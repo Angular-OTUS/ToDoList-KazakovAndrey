@@ -1,12 +1,13 @@
-<input
+<button
     class="rounded-lg p-1 w-16 border-none text-white"
-    type="button"
-    [value]="title()"
     [class.bg-green-500]="color() === 'green'"
     [class.bg-red-400]="color() === 'red'"
     [class.opacity-50]="disabled()"
     [class.cursor-not-allowed]="disabled()"
     [class.cursor-pointer]="!disabled()"
+    [type]="type()"
     [disabled]="disabled()"
-    (click)="clicked.emit()"
-/>
+    (click)="onClick($event)"
+>
+    {{ title() }}
+</button>
