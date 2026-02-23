@@ -1,14 +1,36 @@
 <div
     class="bg-gray-200 rounded-md p-1 mt-2 flex justify-between items-center"
     [class.bg-green-200]="selected()"
-    (click)="onClick()"
 >
-    <span>{{ todo().text }}</span>
+    @if (editing()) {
+        <mat-form-field class="w-122">
+            <input
+                matInput
+                [placeholder]="todo().text"
+                [(ngModel)]="currentText"
+            >
+        </mat-form-field>
+    }
+    @else {
+        <span>{{ todo().text }}</span>
+    }
 
-    <app-button
-        color="red"
-        title="Delete"
-        appHint="Click to delete"
-        (clicked)="onDelete()"
-    />
+    @if (editing()) {
+        <app-button
+            color="green"
+            title="Save"
+            appHint="Click to save"
+            (clicked)="onSave()"
+        />
+    }
+    @else {
+        <app-button
+            color="red"
+            title="Delete"
+            appHint="Click to delete"
+            (clicked)="onDelete()"
+            (dblclick)="$event.stopPropagation()"
+        />
+    }
+
 </div>

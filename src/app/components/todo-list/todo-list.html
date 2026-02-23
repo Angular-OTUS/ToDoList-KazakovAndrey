@@ -8,7 +8,7 @@
         <div class="mt-4 flex">
             <div class="flex-col w-144 mr-10">
                 <ul class="first:mt-0">
-                    @for (todo of todoList(); track todo.id) {
+                    @for (todo of todoList; track todo.id) {
                         <li>
                             <app-todo-item
                                 appHint="Click to select"
@@ -16,6 +16,7 @@
                                 [selected]="selectedItemId() === todo.id"
                                 (todoDeleted)="onTodoDeleted(todo)"
                                 (todoClicked)="onTodoClicked(todo)"
+                                (todoUpdated)="onTodoUpdated(todo.id, $event)"
                             />
                         </li>
                     }
