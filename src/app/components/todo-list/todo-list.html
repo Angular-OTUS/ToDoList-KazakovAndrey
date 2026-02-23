@@ -2,28 +2,43 @@
     <h1 class="text-center text-xl font-medium">{{ title }}</h1>
 
     @if (isLoading()) {
-        <mat-spinner class="mt-12 mb-12"></mat-spinner>
+        <app-spinner/>
     }
     @else {
-        <div class="mt-4 flex">
+        <mat-radio-group
+            class="block mt-4"
+            (change)="filterBy.set($event.value)"
+        >
+            <mat-radio-button value="all" checked>All</mat-radio-button>
+            <mat-radio-button value="COMPLETED">Completed</mat-radio-button>
+            <mat-radio-button value="IN_PROGRESS">In progress</mat-radio-button>
+        </mat-radio-group>
+
+        <div class="flex">
             <div class="flex-col w-144 mr-10">
                 <ul class="first:mt-0">
                     @for (todo of todoList(); track todo.id) {
-                        <li>
-                            <app-todo-item
-                                appHint="Click to select"
-                                [todo]="todo"
-                                [selected]="selectedItemId() === todo.id"
-                                (todoDeleted)="onTodoDeleted(todo)"
-                                (todoClicked)="onTodoClicked(todo)"
-                                (todoUpdated)="onTodoUpdated(todo.id, $event)"
-                            />
-                        </li>
+                        @if (filterBy() === 'all' || filterBy() === todo.status) {
+                            <li>
+                                <app-todo-item
+                                    appHint="Click to select"
+                                    [todo]="todo"
+                                    [selected]="selectedItemId() === todo.id"
+                                    (todoDeleted)="onTodoDeleted(todo)"
+                                    (todoClicked)="onTodoClicked(todo)"
+                                    (todoUpdated)="onTodoUpdated(todo.id, $event)"
+                                    (todoChecked)="onTodoChecked(todo.id, $event)"
+                                />
+                            </li>
+                        }
                     }
                 </ul>
-                <app-todo-input (todoAdded)="onTodoAdded($event)"/>
             </div>
             <app-todo-desc [description]="description()"/>
         </div>
+        <app-create-todo
+            class="block mt-8"
+            (addTodo)="onTodoAdded($event)"
+        />
     }
 </section>

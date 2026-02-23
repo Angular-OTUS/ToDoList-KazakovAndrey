@@ -1,5 +1,5 @@
 <button
-    class="rounded-lg p-1 w-16 border-none text-white"
+    class="rounded-lg p-1 min-w-16 max-w-xl border-none text-white"
     [class.bg-green-500]="color() === 'green'"
     [class.bg-red-400]="color() === 'red'"
     [class.opacity-50]="disabled()"
@@ -9,5 +9,5 @@
     [disabled]="disabled()"
     (click)="onClick($event)"
 >
-    {{ title() }}
+    <ng-content/>
 </button>

@@ -1,11 +1,14 @@
-import { Injectable, signal } from "@angular/core";
-import { Todo } from "src/app/models/Todo";
-import { TodoInputData } from "src/app/models/TodoInputData";
+import { inject, Injectable, signal } from '@angular/core';
+import { Todo } from 'src/app/models/Todo';
+import { TodoData } from 'src/app/models/TodoData';
+import { HttpTodoService } from 'src/app/services/http-todo-service';
 
 @Injectable({
-    providedIn: "root",
+    providedIn: 'root',
 })
 export class TodoService {
+
+    private readonly httpTodoService = inject(HttpTodoService);
 
     private readonly _todoList = signal<Todo[]>([]);
 
@@ -15,32 +18,45 @@ export class TodoService {
         this.initTodoList();
     }
 
-    addTodo(data: TodoInputData): void {
+    addTodo(data: TodoData): void {
         const maxId = Math.max(0, ...this._todoList().map(t => t.id));
-        const todo = {
+        const todo: Todo = {
             id: maxId + 1,
-            text: data.text,
-            description: data.description,
+            title: data.title ?? '',
+            description: data.description ?? null,
+            status: 'IN_PROGRESS',
         };
 
-        this._todoList.update(todoList => [...todoList, todo]);
+        this.httpTodoService.createTodo(todo)
+            .subscribe(created => {
+                this._todoList.update(list => [...list, created]);
+            });
     }
 
     deleteTodo(id: number): void {
-        this._todoList.update(todoList => todoList.filter(t => t.id !== id))
+        this.httpTodoService.deleteTodo(id)
+            .subscribe(() => {
+                this._todoList.update(list => list.filter(t => t.id !== id));
+            });
     }
 
-    updateTodo(id: number, data: TodoInputData): void {
-        this._todoList.update(todoList => todoList.map(todo => todo.id === id ? {...todo, ...data} : todo))
+    updateTodo(id: number, data: TodoData): void {
+        const current = this._todoList().find(t => t.id === id);
+        if (!current) return;
+
+        const updated: Todo = {...current, ...data};
+        this.httpTodoService.updateTodo(updated)
+            .subscribe(todo => {
+                this._todoList.update(list =>
+                    list.map(t => (t.id === id ? todo : t))
+                );
+            });
     }
 
     private initTodoList() {
-        const todoList = [];
-        for (let i = 0; i < 5; i++) {
-            const id = i + 1;
-            todoList.push({id, text: `todo #${id}`, description: `description #${id}`});
-        }
-
-        this._todoList.set(todoList);
+        this.httpTodoService.getTodoList()
+            .subscribe(todos => {
+                this._todoList.set(todos);
+            });
     }
 }

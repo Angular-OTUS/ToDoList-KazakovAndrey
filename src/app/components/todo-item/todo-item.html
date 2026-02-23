@@ -5,33 +5,43 @@
     @if (editing()) {
         <mat-form-field class="w-122">
             <input
+                #editInput
                 matInput
-                [placeholder]="todo().text"
+                [placeholder]="todo().title"
                 [(ngModel)]="currentText"
             >
         </mat-form-field>
     }
     @else {
-        <span>{{ todo().text }}</span>
+        <div class="flex items-center">
+            <mat-checkbox
+                appHint="Click to check/uncheck"
+                [checked]="todo().status === 'COMPLETED'"
+                (change)="todoChecked.emit($event.checked)"
+            />
+            <span class="ml-2">{{ todo().title }}</span>
+        </div>
     }
 
     @if (editing()) {
         <app-button
             color="green"
-            title="Save"
             appHint="Click to save"
             [disabled]="!currentText"
             (clicked)="onSave()"
-        />
+        >
+            Save
+        </app-button>
     }
     @else {
         <app-button
             color="red"
-            title="Delete"
             appHint="Click to delete"
             (clicked)="onDelete()"
             (dblclick)="$event.stopPropagation()"
-        />
+        >
+            Delete
+        </app-button>
     }
 
 </div>
