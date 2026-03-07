@@ -1,0 +1,9 @@
+<div class="absolute right-1.5 bottom-1.5">
+
+    @for (toast of toastList(); track toast.id) {
+        <p class="bg-amber-200 p-2 w-64 text-center not-first:mt-1 rounded-md">
+            {{ toast.text }}
+        </p>
+    }
+
+</div>
