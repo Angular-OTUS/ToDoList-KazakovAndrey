@@ -20,6 +20,7 @@
             color="green"
             title="Save"
             appHint="Click to save"
+            [disabled]="!currentText"
             (clicked)="onSave()"
         />
     }
