@@ -33,6 +33,7 @@ export class TodoList implements OnInit {
 
         return selectedTodo?.description ?? null;
     });
+    protected todoList = computed<Todo[]>(() => this.todoService.todoList());
 
     private readonly todoService: TodoService = inject(TodoService);
     private readonly toastService: ToastService = inject(ToastService);
@@ -43,10 +44,6 @@ export class TodoList implements OnInit {
 
         const firstTodo = this.todoService.todoList().at(0);
         this.selectedItemId.set(firstTodo?.id ?? null);
-    }
-
-    protected get todoList() {
-        return this.todoService.todoList();
     }
 
     protected onTodoDeleted(todo: Todo) {

@@ -1,5 +1,6 @@
-import { Component, ChangeDetectionStrategy, inject } from "@angular/core";
+import { Component, ChangeDetectionStrategy, inject, computed } from "@angular/core";
 import { ToastService } from "src/app/services/toast-service";
+import { Toast } from 'src/app/models/Toast';
 
 @Component({
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -10,7 +11,5 @@ export class ToastList {
 
     private readonly toastService = inject(ToastService);
 
-    protected get toastList() {
-        return this.toastService.toastList;
-    }
+    protected toastList = computed<Toast[]>(() => this.toastService.toastList());
 }
