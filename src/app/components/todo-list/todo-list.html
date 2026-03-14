@@ -3,7 +3,8 @@
 
     @if (isLoading()) {
         <app-spinner/>
-    } @else {
+    }
+    @else {
         <mat-radio-group
             class="block mt-4"
             (change)="filterBy.set($event.value)"
@@ -20,10 +21,9 @@
                         <li>
                             <app-todo-item
                                 appHint="Click to select"
+                                [routerLink]="[todo.id]"
                                 [todo]="todo"
-                                [selected]="selectedItemId() === todo.id"
                                 (todoDeleted)="onTodoDeleted(todo)"
-                                (todoClicked)="onTodoClicked(todo)"
                                 (todoUpdated)="onTodoContentUpdated(todo.id, $event)"
                                 (todoChecked)="onTodoChecked(todo.id, $event)"
                             />
@@ -31,7 +31,7 @@
                     }
                 </ul>
             </div>
-            <app-todo-desc [description]="description()"/>
+            <router-outlet/>
         </div>
         <app-create-todo
             class="block mt-8"

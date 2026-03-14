@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, signal, Component, OnInit, computed, inject } from '@angular/core';
 import { AppSpinner } from 'src/app/components/app-spinner/app-spinner';
-import { TodoDesc } from 'src/app/components/todo-desc/todo-desc';
 import { TodoItem } from 'src/app/components/todo-item/todo-item';
 import { AppHint } from 'src/app/directives/app-hint';
 import { Todo } from 'src/app/models/Todo';
@@ -10,6 +9,7 @@ import { CreateTodoData } from 'src/app/models/CreateTodoData';
 import { TodoStatus } from 'src/app/models/TodoStatus';
 import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
 import { CreateTodo } from 'src/app/components/create-todo/create-todo';
+import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { TodoContentData } from 'src/app/models/TodoContentData';
 
 @Component({
@@ -18,12 +18,13 @@ import { TodoContentData } from 'src/app/models/TodoContentData';
     templateUrl: './todo-list.html',
     imports: [
         TodoItem,
-        TodoDesc,
         AppHint,
         AppSpinner,
         MatRadioButton,
         MatRadioGroup,
         CreateTodo,
+        RouterLink,
+        RouterOutlet,
     ],
 })
 export class TodoList implements OnInit {
@@ -32,13 +33,6 @@ export class TodoList implements OnInit {
     protected readonly isLoading = signal<boolean>(true);
     protected readonly filterBy = signal<'all' | TodoStatus>('all');
 
-    protected readonly selectedItemId = signal<number| null>(null);
-    protected readonly description = computed<string | null>(() => {
-        const itemId = this.selectedItemId();
-        const selectedTodo = this.todoService.todoList().find(item => item.id === itemId);
-
-        return selectedTodo?.description ?? null;
-    });
     protected todoList = computed<Todo[]>(() => this.todoService.todoList());
     protected filteredToList = computed<Todo[]>(() => {
         const status = this.filterBy();
@@ -47,22 +41,20 @@ export class TodoList implements OnInit {
         return status === 'all' ? todos : todos.filter(item => item.status === status);
     });
 
-    private readonly todoService: TodoService = inject(TodoService);
-    private readonly toastService: ToastService = inject(ToastService);
+    private readonly todoService = inject(TodoService);
+    private readonly toastService = inject(ToastService);
+    private readonly router = inject(Router);
 
     ngOnInit() {
-
         setTimeout(() => this.isLoading.set(false), 500);
-
-        const firstTodo = this.todoService.todoList().at(0);
-        this.selectedItemId.set(firstTodo?.id ?? null);
     }
 
     protected onTodoDeleted(todo: Todo) {
         this.todoService.deleteTodo(todo.id);
+        this.toastService.showToast('Todo deleted successfully');
 
-        if (this.selectedItemId() === todo.id) {
-            this.selectedItemId.set(null);
+        if (this.router.url.endsWith(`/${todo.id}`)) {
+            this.router.navigate(['/tasks']);
         }
     }
 
@@ -74,10 +66,6 @@ export class TodoList implements OnInit {
     protected onTodoContentUpdated(idx: number, data: TodoContentData) {
         this.todoService.updateTodoContent(idx, data);
         this.toastService.showToast('Todo updated successfully');
-    }
-
-    protected onTodoClicked(todo: Todo) {
-        this.selectedItemId.set(todo.id);
     }
 
     protected onTodoChecked(idx: number, checked: boolean) {
