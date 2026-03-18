@@ -3,7 +3,7 @@ import { MatFormField, MatInput } from '@angular/material/input';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AppButton } from 'src/app/components/app-button/app-button';
 import { AppHint } from 'src/app/directives/app-hint';
-import { TodoData } from 'src/app/models/TodoData';
+import { CreateTodoData } from 'src/app/models/CreateTodoData';
 
 @Component({
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -21,7 +21,7 @@ export class CreateTodo {
 
     protected readonly form: FormGroup;
 
-    readonly addTodo = output<TodoData>();
+    readonly addTodo = output<CreateTodoData>();
 
     constructor() {
         this.form = new FormGroup({
@@ -31,7 +31,11 @@ export class CreateTodo {
     }
 
     protected onSubmit() {
-        const todo: TodoData = {
+        if (this.form.invalid) {
+            return;
+        }
+
+        const todo: CreateTodoData = {
             title: this.form.get('title')?.value ?? null,
             description: this.form.get('description')?.value ?? null,
         }

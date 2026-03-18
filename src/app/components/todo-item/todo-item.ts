@@ -5,7 +5,7 @@ import { AppButton } from 'src/app/components/app-button/app-button';
 import { AppHint } from 'src/app/directives/app-hint';
 import { Todo } from 'src/app/models/Todo';
 import { MatCheckbox } from '@angular/material/checkbox';
-import { TodoData } from 'src/app/models/TodoData';
+import { TodoContentData } from 'src/app/models/TodoContentData';
 
 @Component({
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -31,7 +31,7 @@ export class TodoItem {
 
     readonly todoDeleted = output<void>();
     readonly todoClicked = output<void>();
-    readonly todoUpdated = output<TodoData>();
+    readonly todoUpdated = output<TodoContentData>();
     readonly todoChecked = output<boolean>();
 
     readonly editing = signal<boolean>(false);
@@ -53,12 +53,7 @@ export class TodoItem {
     }
 
     protected onSave() {
-        this.todoUpdated.emit(
-            {
-                title: this.currentText,
-                description: this.todo().description,
-            },
-        );
+        this.todoUpdated.emit({ title: this.currentText });
 
         this.editing.set(false);
         this.currentText = '';

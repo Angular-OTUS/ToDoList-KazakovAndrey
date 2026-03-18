@@ -6,10 +6,11 @@ import { AppHint } from 'src/app/directives/app-hint';
 import { Todo } from 'src/app/models/Todo';
 import { ToastService } from 'src/app/services/toast-service';
 import { TodoService } from 'src/app/services/todo-service';
-import { TodoData } from 'src/app/models/TodoData';
+import { CreateTodoData } from 'src/app/models/CreateTodoData';
 import { TodoStatus } from 'src/app/models/TodoStatus';
 import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
 import { CreateTodo } from 'src/app/components/create-todo/create-todo';
+import { TodoContentData } from 'src/app/models/TodoContentData';
 
 @Component({
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -39,6 +40,12 @@ export class TodoList implements OnInit {
         return selectedTodo?.description ?? null;
     });
     protected todoList = computed<Todo[]>(() => this.todoService.todoList());
+    protected filteredToList = computed<Todo[]>(() => {
+        const status = this.filterBy();
+        const todos = this.todoList();
+
+        return status === 'all' ? todos : todos.filter(item => item.status === status);
+    });
 
     private readonly todoService: TodoService = inject(TodoService);
     private readonly toastService: ToastService = inject(ToastService);
@@ -59,13 +66,13 @@ export class TodoList implements OnInit {
         }
     }
 
-    protected onTodoAdded(data: TodoData) {
+    protected onTodoAdded(data: CreateTodoData) {
         this.todoService.addTodo(data)
         this.toastService.showToast('Todo added successfully');
     }
 
-    protected onTodoUpdated(idx: number, data: TodoData) {
-        this.todoService.updateTodo(idx, data);
+    protected onTodoContentUpdated(idx: number, data: TodoContentData) {
+        this.todoService.updateTodoContent(idx, data);
         this.toastService.showToast('Todo updated successfully');
     }
 
@@ -75,6 +82,6 @@ export class TodoList implements OnInit {
 
     protected onTodoChecked(idx: number, checked: boolean) {
         const status: TodoStatus = checked ? 'COMPLETED' : 'IN_PROGRESS';
-        this.todoService.updateTodo(idx, { status })
+        this.todoService.updateTodoStatus(idx, { status })
     }
 }

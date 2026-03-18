@@ -3,8 +3,7 @@
 
     @if (isLoading()) {
         <app-spinner/>
-    }
-    @else {
+    } @else {
         <mat-radio-group
             class="block mt-4"
             (change)="filterBy.set($event.value)"
@@ -17,20 +16,18 @@
         <div class="flex">
             <div class="flex-col w-144 mr-10">
                 <ul class="first:mt-0">
-                    @for (todo of todoList(); track todo.id) {
-                        @if (filterBy() === 'all' || filterBy() === todo.status) {
-                            <li>
-                                <app-todo-item
-                                    appHint="Click to select"
-                                    [todo]="todo"
-                                    [selected]="selectedItemId() === todo.id"
-                                    (todoDeleted)="onTodoDeleted(todo)"
-                                    (todoClicked)="onTodoClicked(todo)"
-                                    (todoUpdated)="onTodoUpdated(todo.id, $event)"
-                                    (todoChecked)="onTodoChecked(todo.id, $event)"
-                                />
-                            </li>
-                        }
+                    @for (todo of filteredToList(); track todo.id) {
+                        <li>
+                            <app-todo-item
+                                appHint="Click to select"
+                                [todo]="todo"
+                                [selected]="selectedItemId() === todo.id"
+                                (todoDeleted)="onTodoDeleted(todo)"
+                                (todoClicked)="onTodoClicked(todo)"
+                                (todoUpdated)="onTodoContentUpdated(todo.id, $event)"
+                                (todoChecked)="onTodoChecked(todo.id, $event)"
+                            />
+                        </li>
                     }
                 </ul>
             </div>

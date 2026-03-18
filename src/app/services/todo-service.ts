@@ -1,7 +1,11 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { Todo } from 'src/app/models/Todo';
-import { TodoData } from 'src/app/models/TodoData';
+import { CreateTodoData } from 'src/app/models/CreateTodoData';
 import { HttpTodoService } from 'src/app/services/http-todo-service';
+import { TodoContentData } from 'src/app/models/TodoContentData';
+import { TodoStatusData } from 'src/app/models/TodoStatusData';
+import { catchError, throwError } from 'rxjs';
+import { ToastService } from 'src/app/services/toast-service';
 
 @Injectable({
     providedIn: 'root',
@@ -9,6 +13,7 @@ import { HttpTodoService } from 'src/app/services/http-todo-service';
 export class TodoService {
 
     private readonly httpTodoService = inject(HttpTodoService);
+    private readonly toastService = inject(ToastService);
 
     private readonly _todoList = signal<Todo[]>([]);
 
@@ -18,7 +23,7 @@ export class TodoService {
         this.initTodoList();
     }
 
-    addTodo(data: TodoData): void {
+    addTodo(data: CreateTodoData): void {
         const maxId = Math.max(0, ...this._todoList().map(t => t.id));
         const todo: Todo = {
             id: maxId + 1,
@@ -28,6 +33,12 @@ export class TodoService {
         };
 
         this.httpTodoService.createTodo(todo)
+            .pipe(
+                catchError(err => {
+                    this.toastService.showToast("Failed to add todo")
+                    return throwError(() => err);
+                }),
+            )
             .subscribe(created => {
                 this._todoList.update(list => [...list, created]);
             });
@@ -35,17 +46,49 @@ export class TodoService {
 
     deleteTodo(id: number): void {
         this.httpTodoService.deleteTodo(id)
+            .pipe(
+                catchError(err => {
+                    this.toastService.showToast("Failed to delete todo")
+                    return throwError(() => err);
+                }),
+            )
             .subscribe(() => {
                 this._todoList.update(list => list.filter(t => t.id !== id));
             });
     }
 
-    updateTodo(id: number, data: TodoData): void {
+    updateTodoContent(id: number, data: TodoContentData): void {
         const current = this._todoList().find(t => t.id === id);
         if (!current) return;
 
         const updated: Todo = {...current, ...data};
         this.httpTodoService.updateTodo(updated)
+            .pipe(
+                catchError(err => {
+                    this.toastService.showToast("Failed to update todo")
+                    return throwError(() => err);
+                }),
+            )
+            .subscribe(todo => {
+                this._todoList.update(list =>
+                    list.map(t => (t.id === id ? todo : t))
+                );
+            });
+    }
+
+    updateTodoStatus(id: number, data: TodoStatusData): void {
+        const current = this._todoList().find(t => t.id === id);
+        if (!current) return;
+
+        const updated: Todo = {...current, ...data};
+
+        this.httpTodoService.updateTodo(updated)
+            .pipe(
+                catchError(err => {
+                    this.toastService.showToast("Failed to change todo status")
+                    return throwError(() => err);
+                }),
+            )
             .subscribe(todo => {
                 this._todoList.update(list =>
                     list.map(t => (t.id === id ? todo : t))
@@ -55,6 +98,12 @@ export class TodoService {
 
     private initTodoList() {
         this.httpTodoService.getTodoList()
+            .pipe(
+                catchError(err => {
+                    this.toastService.showToast("Failed to get todos")
+                    return throwError(() => err);
+                }),
+            )
             .subscribe(todos => {
                 this._todoList.set(todos);
             });
