@@ -3,7 +3,6 @@ import { AppSpinner } from 'src/app/components/app-spinner/app-spinner';
 import { TodoItem } from 'src/app/components/todo-item/todo-item';
 import { AppHint } from 'src/app/directives/app-hint';
 import { Todo } from 'src/app/models/Todo';
-import { ToastService } from 'src/app/services/toast-service';
 import { TodoService } from 'src/app/services/todo-service';
 import { CreateTodoData } from 'src/app/models/CreateTodoData';
 import { TodoStatus } from 'src/app/models/TodoStatus';
@@ -42,7 +41,6 @@ export class TodoList implements OnInit {
     });
 
     private readonly todoService = inject(TodoService);
-    private readonly toastService = inject(ToastService);
     private readonly router = inject(Router);
 
     ngOnInit() {
@@ -51,7 +49,6 @@ export class TodoList implements OnInit {
 
     protected onTodoDeleted(todo: Todo) {
         this.todoService.deleteTodo(todo.id);
-        this.toastService.showToast('Todo deleted successfully');
 
         if (this.router.url.endsWith(`/${todo.id}`)) {
             this.router.navigate(['/tasks']);
@@ -60,12 +57,10 @@ export class TodoList implements OnInit {
 
     protected onTodoAdded(data: CreateTodoData) {
         this.todoService.addTodo(data)
-        this.toastService.showToast('Todo added successfully');
     }
 
     protected onTodoContentUpdated(idx: number, data: TodoContentData) {
         this.todoService.updateTodoContent(idx, data);
-        this.toastService.showToast('Todo updated successfully');
     }
 
     protected onTodoChecked(idx: number, checked: boolean) {
