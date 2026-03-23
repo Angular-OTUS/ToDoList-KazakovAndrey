@@ -1,11 +1,19 @@
-import { Injectable, signal } from "@angular/core";
-import { Todo } from "src/app/models/Todo";
-import { TodoInputData } from "src/app/models/TodoInputData";
+import { inject, Injectable, signal } from '@angular/core';
+import { Todo } from 'src/app/models/Todo';
+import { CreateTodoData } from 'src/app/models/CreateTodoData';
+import { HttpTodoService } from 'src/app/services/http-todo-service';
+import { TodoContentData } from 'src/app/models/TodoContentData';
+import { TodoStatusData } from 'src/app/models/TodoStatusData';
+import { catchError, throwError } from 'rxjs';
+import { ToastService } from 'src/app/services/toast-service';
 
 @Injectable({
-    providedIn: "root",
+    providedIn: 'root',
 })
 export class TodoService {
+
+    private readonly httpTodoService = inject(HttpTodoService);
+    private readonly toastService = inject(ToastService);
 
     private readonly _todoList = signal<Todo[]>([]);
 
@@ -15,32 +23,89 @@ export class TodoService {
         this.initTodoList();
     }
 
-    addTodo(data: TodoInputData): void {
+    addTodo(data: CreateTodoData): void {
         const maxId = Math.max(0, ...this._todoList().map(t => t.id));
-        const todo = {
+        const todo: Todo = {
             id: maxId + 1,
-            text: data.text,
-            description: data.description,
+            title: data.title ?? '',
+            description: data.description ?? null,
+            status: 'IN_PROGRESS',
         };
 
-        this._todoList.update(todoList => [...todoList, todo]);
+        this.httpTodoService.createTodo(todo)
+            .pipe(
+                catchError(err => {
+                    this.toastService.showToast("Failed to add todo")
+                    return throwError(() => err);
+                }),
+            )
+            .subscribe(created => {
+                this._todoList.update(list => [...list, created]);
+            });
     }
 
     deleteTodo(id: number): void {
-        this._todoList.update(todoList => todoList.filter(t => t.id !== id))
+        this.httpTodoService.deleteTodo(id)
+            .pipe(
+                catchError(err => {
+                    this.toastService.showToast("Failed to delete todo")
+                    return throwError(() => err);
+                }),
+            )
+            .subscribe(() => {
+                this._todoList.update(list => list.filter(t => t.id !== id));
+            });
     }
 
-    updateTodo(id: number, data: TodoInputData): void {
-        this._todoList.update(todoList => todoList.map(todo => todo.id === id ? {...todo, ...data} : todo))
+    updateTodoContent(id: number, data: TodoContentData): void {
+        const current = this._todoList().find(t => t.id === id);
+        if (!current) return;
+
+        const updated: Todo = {...current, ...data};
+        this.httpTodoService.updateTodo(updated)
+            .pipe(
+                catchError(err => {
+                    this.toastService.showToast("Failed to update todo")
+                    return throwError(() => err);
+                }),
+            )
+            .subscribe(todo => {
+                this._todoList.update(list =>
+                    list.map(t => (t.id === id ? todo : t))
+                );
+            });
+    }
+
+    updateTodoStatus(id: number, data: TodoStatusData): void {
+        const current = this._todoList().find(t => t.id === id);
+        if (!current) return;
+
+        const updated: Todo = {...current, ...data};
+
+        this.httpTodoService.updateTodo(updated)
+            .pipe(
+                catchError(err => {
+                    this.toastService.showToast("Failed to change todo status")
+                    return throwError(() => err);
+                }),
+            )
+            .subscribe(todo => {
+                this._todoList.update(list =>
+                    list.map(t => (t.id === id ? todo : t))
+                );
+            });
     }
 
     private initTodoList() {
-        const todoList = [];
-        for (let i = 0; i < 5; i++) {
-            const id = i + 1;
-            todoList.push({id, text: `todo #${id}`, description: `description #${id}`});
-        }
-
-        this._todoList.set(todoList);
+        this.httpTodoService.getTodoList()
+            .pipe(
+                catchError(err => {
+                    this.toastService.showToast("Failed to get todos")
+                    return throwError(() => err);
+                }),
+            )
+            .subscribe(todos => {
+                this._todoList.set(todos);
+            });
     }
 }

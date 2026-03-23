@@ -1,0 +1,31 @@
+<form
+    class="flex flex-col justify-end"
+    [formGroup]="form"
+    (submit)="onSubmit()"
+>
+    <mat-form-field class="w-127">
+        <input
+            matInput
+            placeholder="Add todo text"
+            formControlName="title"
+        >
+    </mat-form-field>
+    <mat-form-field class="w-127">
+        <textarea
+            matInput
+            maxlength="256"
+            placeholder="Add todo description"
+            formControlName="description"
+            [rows]="1"
+        ></textarea>
+    </mat-form-field>
+    <app-button
+        class="w-fit"
+        color="green"
+        type="submit"
+        appHint="Click to add"
+        [disabled]="form.invalid"
+    >
+        Add
+    </app-button>
+</form>

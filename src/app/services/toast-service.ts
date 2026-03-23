@@ -1,6 +1,6 @@
-import { Injectable, signal } from "@angular/core";
-import { environment } from "src/app/config/environment";
-import { Toast } from "src/app/models/Toast";
+import { Injectable, signal } from '@angular/core';
+import { environment } from 'src/app/config/environment';
+import { Toast } from 'src/app/models/Toast';
 
 @Injectable({
     providedIn: 'root'
