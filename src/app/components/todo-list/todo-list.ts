@@ -28,7 +28,6 @@ import { TodoContentData } from 'src/app/models/TodoContentData';
 })
 export class TodoList implements OnInit {
 
-    protected readonly title = 'Todo List';
     protected readonly isLoading = signal<boolean>(true);
     protected readonly filterBy = signal<'all' | TodoStatus>('all');
 
@@ -51,7 +50,7 @@ export class TodoList implements OnInit {
         this.todoService.deleteTodo(todo.id);
 
         if (this.router.url.endsWith(`/${todo.id}`)) {
-            this.router.navigate(['/tasks']);
+            this.router.navigate(['/backlog']);
         }
     }
 

@@ -1,4 +1,18 @@
-<main class="w-260 m-auto mt-8 mb-8 rounded-md p-2 p-8 flex flex-col items-center shadow-lg">
+<main class="w-260 m-auto mt-8 mb-8 rounded-md p-2 p-8 flex flex-col items-left shadow-lg">
+    <nav class="flex text-center mb-4">
+        <a class="p-2 hover:bg-green-100 rounded-md block w-20"
+           [routerLink]="['board']"
+           [routerLinkActive]="'text-green-600'"
+        >
+            Board
+        </a>
+        <a class="p-2 hover:bg-green-100 rounded-md block w-20"
+           [routerLink]="['backlog']"
+           [routerLinkActive]="'text-green-600'"
+        >
+            Backlog
+        </a>
+    </nav>
     <router-outlet/>
     <app-toast-list/>
 </main>
