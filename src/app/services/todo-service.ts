@@ -41,6 +41,7 @@ export class TodoService {
             )
             .subscribe(created => {
                 this._todoList.update(list => [...list, created]);
+                this.toastService.showToast('Todo added successfully');
             });
     }
 
@@ -54,6 +55,7 @@ export class TodoService {
             )
             .subscribe(() => {
                 this._todoList.update(list => list.filter(t => t.id !== id));
+                this.toastService.showToast('Todo deleted successfully');
             });
     }
 
@@ -73,6 +75,7 @@ export class TodoService {
                 this._todoList.update(list =>
                     list.map(t => (t.id === id ? todo : t))
                 );
+                this.toastService.showToast('Todo updated successfully');
             });
     }
 
@@ -93,6 +96,7 @@ export class TodoService {
                 this._todoList.update(list =>
                     list.map(t => (t.id === id ? todo : t))
                 );
+                this.toastService.showToast('Todo status changed successfully');
             });
     }
 
