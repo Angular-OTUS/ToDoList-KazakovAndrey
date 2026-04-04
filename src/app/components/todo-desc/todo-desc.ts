@@ -16,10 +16,10 @@ export class TodoDesc {
     protected readonly todoId = input.required<string | null>();
 
     protected readonly todoDesc = computed(() => {
-        const id = Number(this.todoId());
+        const id = this.todoId();
         const list = this.todoService.todoList();
 
-        return list.find(t => +t.id === id)?.description ?? null;
+        return list.find(t => t.id === id)?.description ?? null;
     });
 
     private readonly todoService = inject(TodoService);

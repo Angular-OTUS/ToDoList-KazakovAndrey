@@ -20,7 +20,7 @@ export class HttpTodoService {
         return this.http.post<Todo>(`${environment.apiUrl}/todos`, todo, {headers})
     }
 
-    public deleteTodo(id: number) {
+    public deleteTodo(id: string) {
         const headers = new HttpHeaders({'Content-Type': 'application/json'});
         return this.http.delete<Todo>(`${environment.apiUrl}/todos/${id}`, {headers})
     }

@@ -59,11 +59,11 @@ export class TodoList implements OnInit {
         this.todoService.addTodo(data)
     }
 
-    protected onTodoContentUpdated(idx: number, data: TodoContentData) {
+    protected onTodoContentUpdated(idx: string, data: TodoContentData) {
         this.todoService.updateTodoContent(idx, data);
     }
 
-    protected onTodoChecked(idx: number, checked: boolean) {
+    protected onTodoChecked(idx: string, checked: boolean) {
         const status: TodoStatus = checked ? 'COMPLETED' : 'IN_PROGRESS';
         this.todoService.updateTodoStatus(idx, { status })
     }
