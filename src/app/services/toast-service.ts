@@ -1,4 +1,5 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, timer } from 'rxjs';
 import { environment } from 'src/app/config/environment';
 import { Toast } from 'src/app/models/Toast';
 
@@ -7,9 +8,9 @@ import { Toast } from 'src/app/models/Toast';
 })
 export class ToastService {
 
-    private readonly _toastList = signal<Toast[]>([]);
+    private readonly _toastList$ = new BehaviorSubject<Toast[]>([]);
 
-    readonly toastList = this._toastList.asReadonly();
+    readonly toastList$ = this._toastList$.asObservable();
 
     showToast(text: string) {
         const toastId = this.addToast(text);
@@ -17,21 +18,22 @@ export class ToastService {
     }
 
     private addToast(text: string): number {
-        const maxId = Math.max(0, ...this._toastList().map(t => t.id));
+        const current = this._toastList$.getValue();
+        const maxId = Math.max(0, ...current.map(t => t.id));
         const toast = {
             id: maxId + 1,
             text: text
         };
 
-        this._toastList.update(toastList => [...toastList, toast]);
+        this._toastList$.next([...current, toast]);
 
         return toast.id;
     }
 
     private removeToast(id: number) {
-        setTimeout(
-            () => this._toastList.update(toastList => toastList.filter(t => t.id != id)),
-            environment.toastTTL,
-        );
+        timer(environment.toastTTL).subscribe(() => {
+            const current = this._toastList$.getValue();
+            this._toastList$.next(current.filter(t => t.id != id));
+        });
     }
 }

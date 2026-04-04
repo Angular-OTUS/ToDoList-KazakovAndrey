@@ -15,17 +15,17 @@ export class HttpTodoService {
         return this.http.get<Todo[]>(`${environment.apiUrl}/todos`, {headers})
     }
 
-    public createTodo(todo: Todo) {
+    public createTodo(todo: Todo): Observable<Todo> {
         const headers = new HttpHeaders({'Content-Type': 'application/json'});
         return this.http.post<Todo>(`${environment.apiUrl}/todos`, todo, {headers})
     }
 
-    public deleteTodo(id: string) {
+    public deleteTodo(id: string): Observable<Todo> {
         const headers = new HttpHeaders({'Content-Type': 'application/json'});
         return this.http.delete<Todo>(`${environment.apiUrl}/todos/${id}`, {headers})
     }
 
-    public updateTodo(todo: Todo) {
+    public updateTodo(todo: Todo): Observable<Todo> {
         const headers = new HttpHeaders({'Content-Type': 'application/json'});
         return this.http.put<Todo>(`${environment.apiUrl}/todos/${todo.id}`, todo, {headers})
     }
