@@ -30,7 +30,6 @@ export class TodoItem {
     readonly todo = input.required<Todo>();
 
     readonly todoDeleted = output<void>();
-    readonly todoClicked = output<void>();
     readonly todoUpdated = output<TodoContentData>();
     readonly todoChecked = output<boolean>();
 

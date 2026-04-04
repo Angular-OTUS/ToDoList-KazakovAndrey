@@ -8,8 +8,10 @@ import { CreateTodoData } from 'src/app/models/CreateTodoData';
 import { TodoStatus } from 'src/app/models/TodoStatus';
 import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
 import { CreateTodo } from 'src/app/components/create-todo/create-todo';
-import { Router, RouterLink, RouterOutlet } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { TodoContentData } from 'src/app/models/TodoContentData';
+import { of } from 'rxjs';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -41,6 +43,13 @@ export class TodoList implements OnInit {
 
     private readonly todoService = inject(TodoService);
     private readonly router = inject(Router);
+    private readonly route = inject(ActivatedRoute);
+
+    private readonly paramMap = toSignal(this.route.firstChild?.paramMap ?? of(), {initialValue: null});
+    private readonly selectedTodoId = computed<string>(() => {
+        const pm = this.paramMap();
+        return pm?.get('todoId') ?? '';
+    });
 
     ngOnInit() {
         setTimeout(() => this.isLoading.set(false), 500);
@@ -49,8 +58,8 @@ export class TodoList implements OnInit {
     protected onTodoDeleted(todo: Todo) {
         this.todoService.deleteTodo(todo.id);
 
-        if (this.router.url.endsWith(`/${todo.id}`)) {
-            this.router.navigate(['/backlog']);
+        if (this.selectedTodoId() === todo.id) {
+            this.router.navigate(['/tasks']);
         }
     }
 
@@ -58,11 +67,11 @@ export class TodoList implements OnInit {
         this.todoService.addTodo(data)
     }
 
-    protected onTodoContentUpdated(idx: number, data: TodoContentData) {
+    protected onTodoContentUpdated(idx: string, data: TodoContentData) {
         this.todoService.updateTodoContent(idx, data);
     }
 
-    protected onTodoChecked(idx: number, checked: boolean) {
+    protected onTodoChecked(idx: string, checked: boolean) {
         const status: TodoStatus = checked ? 'COMPLETED' : 'IN_PROGRESS';
         this.todoService.updateTodoStatus(idx, { status })
     }
