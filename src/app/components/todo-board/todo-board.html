@@ -1,0 +1,21 @@
+<section class="flex justify-around">
+
+    @if (isLoading()) {
+        <app-spinner></app-spinner>
+    }
+    @else {
+        <section class="w-90 p-2 flex flex-col items-center">
+            <h2>In progress</h2>
+            @for (todo of inProgress(); track todo.id) {
+                <div class="w-full p-4 text-center border-2 rounded-md mt-4">{{ todo.title }}</div>
+            }
+        </section>
+        <section class="w-90 ml-4 p-2 flex flex-col items-center">
+            <h2>Completed</h2>
+            @for (todo of completed(); track todo.id) {
+                <div class="w-full p-4 text-center border-2 rounded-md mt-4">{{ todo.title }}</div>
+            }
+        </section>
+    }
+
+</section>

@@ -3,11 +3,11 @@ import { Routes } from '@angular/router';
 export const appRoutes: Routes = [
     {
         path: '',
-        redirectTo: 'tasks',
+        redirectTo: 'board',
         pathMatch: 'full',
     },
     {
-        path: 'tasks',
+        path: 'backlog',
         loadComponent: () => import("src/app/components/todo-list/todo-list").then(m => m.TodoList),
         children: [
             {
@@ -17,7 +17,11 @@ export const appRoutes: Routes = [
         ],
     },
     {
+        path: 'board',
+        loadComponent: () => import("src/app/components/todo-board/todo-board").then(m => m.TodoBoard),
+    },
+    {
         path: '**',
-        redirectTo: 'tasks',
+        redirectTo: 'board',
     },
 ];

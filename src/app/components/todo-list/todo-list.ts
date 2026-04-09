@@ -30,7 +30,6 @@ import { toSignal } from '@angular/core/rxjs-interop';
 })
 export class TodoList implements OnInit {
 
-    protected readonly title = 'Todo List';
     protected readonly isLoading = signal<boolean>(true);
     protected readonly filterBy = signal<'all' | TodoStatus>('all');
 
