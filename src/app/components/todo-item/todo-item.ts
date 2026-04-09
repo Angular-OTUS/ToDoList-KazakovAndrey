@@ -6,6 +6,7 @@ import { AppHint } from 'src/app/directives/app-hint';
 import { Todo } from 'src/app/models/Todo';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { TodoContentData } from 'src/app/models/TodoContentData';
+import { RouterLinkActive } from '@angular/router';
 
 @Component({
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -18,19 +19,17 @@ import { TodoContentData } from 'src/app/models/TodoContentData';
         MatFormField,
         MatInput,
         MatCheckbox,
+        RouterLinkActive,
     ],
     host: {
-        '(click)': 'onClick()',
         '(dblclick)': 'onDblClick()',
     },
 })
 export class TodoItem {
 
     readonly todo = input.required<Todo>();
-    readonly selected = input.required<boolean>();
 
     readonly todoDeleted = output<void>();
-    readonly todoClicked = output<void>();
     readonly todoUpdated = output<TodoContentData>();
     readonly todoChecked = output<boolean>();
 
@@ -57,10 +56,6 @@ export class TodoItem {
 
         this.editing.set(false);
         this.currentText = '';
-    }
-
-    protected onClick() {
-        this.todoClicked.emit();
     }
 
     protected onDblClick() {

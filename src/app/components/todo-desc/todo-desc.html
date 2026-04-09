@@ -1,8 +1,15 @@
-<mat-form-field class="w-80">
-    <textarea
-        matInput
-        [readonly]="true"
-    >
-        {{description()}}
-    </textarea>
-</mat-form-field>
+<section class="flex">
+    <mat-checkbox
+        appHint="Click to check/uncheck"
+        [checked]="todo()?.status === 'COMPLETED'"
+        (change)="onTodoChecked($event.checked)"
+    />
+    <mat-form-field class="w-80">
+        <textarea
+            matInput
+            [readonly]="true"
+        >
+            {{todo()?.description ?? ''}}
+        </textarea>
+    </mat-form-field>
+</section>

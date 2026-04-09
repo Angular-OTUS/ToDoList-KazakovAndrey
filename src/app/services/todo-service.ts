@@ -24,9 +24,9 @@ export class TodoService {
     }
 
     addTodo(data: CreateTodoData): void {
-        const maxId = Math.max(0, ...this._todoList().map(t => t.id));
+        const maxId = Math.max(0, ...this._todoList().map(t => +t.id));
         const todo: Todo = {
-            id: maxId + 1,
+            id: maxId + 1 + '',
             title: data.title ?? '',
             description: data.description ?? null,
             status: 'IN_PROGRESS',
@@ -41,10 +41,11 @@ export class TodoService {
             )
             .subscribe(created => {
                 this._todoList.update(list => [...list, created]);
+                this.toastService.showToast('Todo added successfully');
             });
     }
 
-    deleteTodo(id: number): void {
+    deleteTodo(id: string): void {
         this.httpTodoService.deleteTodo(id)
             .pipe(
                 catchError(err => {
@@ -54,10 +55,11 @@ export class TodoService {
             )
             .subscribe(() => {
                 this._todoList.update(list => list.filter(t => t.id !== id));
+                this.toastService.showToast('Todo deleted successfully');
             });
     }
 
-    updateTodoContent(id: number, data: TodoContentData): void {
+    updateTodoContent(id: string, data: TodoContentData): void {
         const current = this._todoList().find(t => t.id === id);
         if (!current) return;
 
@@ -73,10 +75,11 @@ export class TodoService {
                 this._todoList.update(list =>
                     list.map(t => (t.id === id ? todo : t))
                 );
+                this.toastService.showToast('Todo updated successfully');
             });
     }
 
-    updateTodoStatus(id: number, data: TodoStatusData): void {
+    updateTodoStatus(id: string, data: TodoStatusData): void {
         const current = this._todoList().find(t => t.id === id);
         if (!current) return;
 
@@ -93,6 +96,7 @@ export class TodoService {
                 this._todoList.update(list =>
                     list.map(t => (t.id === id ? todo : t))
                 );
+                this.toastService.showToast('Todo status changed successfully');
             });
     }
 

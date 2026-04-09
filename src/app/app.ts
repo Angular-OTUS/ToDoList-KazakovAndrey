@@ -1,14 +1,14 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ToastList } from "src/app/components/toast-list/toast-list";
-import { TodoList } from 'src/app/components/todo-list/todo-list';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
     changeDetection: ChangeDetectionStrategy.OnPush,
     selector: 'app-root',
     templateUrl: './app.html',
     imports: [
-        TodoList,
         ToastList,
+        RouterOutlet,
     ],
 })
 export class App {
