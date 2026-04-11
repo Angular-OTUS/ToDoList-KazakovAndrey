@@ -16,6 +16,7 @@
         <div class="flex items-center">
             <mat-checkbox
                 appHint="Click to check/uncheck"
+                i18n-appHint="Hint | Click to check/unckeck"
                 [checked]="todo().status === 'COMPLETED'"
                 (change)="todoChecked.emit($event.checked)"
             />
@@ -27,6 +28,8 @@
         <app-button
             color="green"
             appHint="Click to save"
+            i18n-appHint="Hint | Click to save"
+            i18n="@@Save"
             [disabled]="!currentText"
             (clicked)="onSave()"
         >
@@ -37,6 +40,8 @@
         <app-button
             color="red"
             appHint="Click to delete"
+            i18n-appHint="Hint | Click to delete"
+            i18n="@@Delete"
             (clicked)="onDelete()"
             (dblclick)="$event.stopPropagation()"
         >
