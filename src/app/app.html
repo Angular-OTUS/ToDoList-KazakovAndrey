@@ -1,18 +1,28 @@
 <main class="w-260 m-auto mt-8 mb-8 rounded-md p-2 p-8 flex flex-col shadow-lg">
-    <nav class="flex text-center mb-4">
-        <a class="p-2 hover:bg-green-100 rounded-md block w-20"
-           [routerLink]="['board']"
-           [routerLinkActive]="'text-green-600'"
-        >
-            Board
-        </a>
-        <a class="p-2 hover:bg-green-100 rounded-md block w-20"
-           [routerLink]="['backlog']"
-           [routerLinkActive]="'text-green-600'"
-        >
-            Backlog
-        </a>
-    </nav>
+    <header class="flex justify-between">
+        <nav class="flex text-center mb-4">
+            <a class="p-2 hover:bg-green-100 rounded-md block w-20"
+               i18n="@@Board"
+               [routerLink]="['board']"
+               [routerLinkActive]="'text-green-600'"
+            >
+                Board
+            </a>
+            <a class="p-2 hover:bg-green-100 rounded-md block w-20"
+               i18n="@@Backlog"
+               [routerLink]="['backlog']"
+               [routerLinkActive]="'text-green-600'"
+            >
+                Backlog
+            </a>
+        </nav>
+
+        <div class="flex items-center">
+            <a [href]="enUrl">EN</a>
+            <a [href]="ruUrl" class="ml-2">RU</a>
+        </div>
+    </header>
+
     <router-outlet/>
     <app-toast-list/>
 </main>

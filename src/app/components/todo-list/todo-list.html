@@ -7,9 +7,9 @@
             class="block mt-4"
             (change)="filterBy.set($event.value)"
         >
-            <mat-radio-button value="all" checked>All</mat-radio-button>
-            <mat-radio-button value="COMPLETED">Completed</mat-radio-button>
-            <mat-radio-button value="IN_PROGRESS">In progress</mat-radio-button>
+            <mat-radio-button value="all" checked i18n="@@All">All</mat-radio-button>
+            <mat-radio-button value="COMPLETED" i18n="@@Completed">Completed</mat-radio-button>
+            <mat-radio-button value="IN_PROGRESS" i18n="@@InProgress">In progress</mat-radio-button>
         </mat-radio-group>
 
         <div class="flex">
@@ -19,6 +19,7 @@
                         <li>
                             <app-todo-item
                                 appHint="Click to select"
+                                i18n-appHint="Hint | Click to select"
                                 [routerLink]="[todo.id]"
                                 [todo]="todo"
                                 (todoDeleted)="onTodoDeleted(todo)"

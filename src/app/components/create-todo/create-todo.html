@@ -7,6 +7,7 @@
         <input
             matInput
             placeholder="Add todo text"
+            i18n-placeholder="Create todo | Add text"
             formControlName="title"
         >
     </mat-form-field>
@@ -15,6 +16,7 @@
             matInput
             maxlength="256"
             placeholder="Add todo description"
+            i18n-placeholder="Create todo | Add description"
             formControlName="description"
             [rows]="1"
         ></textarea>
@@ -24,6 +26,8 @@
         color="green"
         type="submit"
         appHint="Click to add"
+        i18n="@@Add"
+        i18n-appHint="Hint | Click to add"
         [disabled]="form.invalid"
     >
         Add

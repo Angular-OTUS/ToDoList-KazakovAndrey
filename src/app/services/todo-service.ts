@@ -35,13 +35,13 @@ export class TodoService {
         this.httpTodoService.createTodo(todo)
             .pipe(
                 catchError(err => {
-                    this.toastService.showToast("Failed to add todo")
+                    this.toastService.showToast($localize`:@@TodoAddFail:Failed to add todo`)
                     return throwError(() => err);
                 }),
             )
             .subscribe(created => {
                 this._todoList.update(list => [...list, created]);
-                this.toastService.showToast('Todo added successfully');
+                this.toastService.showToast($localize`:@@TodoAddSuccess:Todo added successfully`);
             });
     }
 
@@ -49,13 +49,13 @@ export class TodoService {
         this.httpTodoService.deleteTodo(id)
             .pipe(
                 catchError(err => {
-                    this.toastService.showToast("Failed to delete todo")
+                    this.toastService.showToast($localize`:@@TodoDeleteFail:Failed to delete todo`)
                     return throwError(() => err);
                 }),
             )
             .subscribe(() => {
                 this._todoList.update(list => list.filter(t => t.id !== id));
-                this.toastService.showToast('Todo deleted successfully');
+                this.toastService.showToast($localize`:@@TodoDeleteSuccess:Todo deleted successfully`);
             });
     }
 
@@ -67,7 +67,7 @@ export class TodoService {
         this.httpTodoService.updateTodo(updated)
             .pipe(
                 catchError(err => {
-                    this.toastService.showToast("Failed to update todo")
+                    this.toastService.showToast($localize`:@@TodoUpdateFail:Failed to update todo`)
                     return throwError(() => err);
                 }),
             )
@@ -75,7 +75,7 @@ export class TodoService {
                 this._todoList.update(list =>
                     list.map(t => (t.id === id ? todo : t))
                 );
-                this.toastService.showToast('Todo updated successfully');
+                this.toastService.showToast($localize`:@@TodoUpdateSuccess:Todo updated successfully`);
             });
     }
 
@@ -88,7 +88,7 @@ export class TodoService {
         this.httpTodoService.updateTodo(updated)
             .pipe(
                 catchError(err => {
-                    this.toastService.showToast("Failed to change todo status")
+                    this.toastService.showToast($localize`:@@TodoUpdateStateFail:Failed to change todo status`)
                     return throwError(() => err);
                 }),
             )
@@ -96,7 +96,7 @@ export class TodoService {
                 this._todoList.update(list =>
                     list.map(t => (t.id === id ? todo : t))
                 );
-                this.toastService.showToast('Todo status changed successfully');
+                this.toastService.showToast($localize`:@@TodoUpdateStateSuccess:Todo status changed successfully`);
             });
     }
 
@@ -104,7 +104,7 @@ export class TodoService {
         this.httpTodoService.getTodoList()
             .pipe(
                 catchError(err => {
-                    this.toastService.showToast("Failed to get todos")
+                    this.toastService.showToast($localize`:@@TodoGetAllFail:Failed to get todos`)
                     return throwError(() => err);
                 }),
             )
